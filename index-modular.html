@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Solar Case Pre-Qualification</title>
+
+  <!-- External CSS -->
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<div class="solar-qual-form" id="solarQualForm">
+  <h2>Solar Case Pre-Qualification</h2>
+  <p class="subtitle">Help us understand your solar situation</p>
+
+  <div class="error-message" id="errorMessage"></div>
+
+  <form id="qualificationForm">
+    <!-- Contact Information -->
+    <div class="form-group">
+      <label for="fullName">Full Name <span class="required">*</span></label>
+      <input type="text" id="fullName" name="fullName" required placeholder="John Doe">
+    </div>
+
+    <div class="form-group">
+      <label for="email">Email Address <span class="required">*</span></label>
+      <input type="email" id="email" name="email" required placeholder="john@example.com">
+    </div>
+
+    <div class="form-group">
+      <label for="phone">Phone Number <span class="required">*</span></label>
+      <input type="tel" id="phone" name="phone" required placeholder="(555) 123-4567">
+    </div>
+
+    <!-- Qualification Questions -->
+    <div class="form-group">
+      <label>Are you paying MORE for electricity after going solar? <span class="required">*</span></label>
+      <div class="radio-group">
+        <label>
+          <input type="radio" name="payingMore" value="yes" required>
+          <span>Yes</span>
+        </label>
+        <label>
+          <input type="radio" name="payingMore" value="no">
+          <span>No</span>
+        </label>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Are your solar panels shaded at any part of the day? <span class="required">*</span></label>
+      <div class="radio-group">
+        <label>
+          <input type="radio" name="shade" value="yes" required>
+          <span>Yes</span>
+        </label>
+        <label>
+          <input type="radio" name="shade" value="no">
+          <span>No</span>
+        </label>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Is the inverter mounted on the outside of your house? <span class="required">*</span></label>
+      <div class="radio-group">
+        <label>
+          <input type="radio" name="inverterOutside" value="yes" required>
+          <span>Yes</span>
+        </label>
+        <label>
+          <input type="radio" name="inverterOutside" value="no">
+          <span>No</span>
+        </label>
+      </div>
+    </div>
+
+    <button type="submit" class="submit-btn" id="submitBtn">Submit Pre-Qualification</button>
+  </form>
+</div>
+
+<div class="success-message" id="successMessage">
+  <div class="icon">✓</div>
+  <h3>Thank You!</h3>
+  <p>Your information has been submitted successfully.<br>We'll review your case and be in touch soon!</p>
+</div>
+
+<!-- External JavaScript -->
+<script src="js/config.js"></script>
+<script src="js/scoring.js"></script>
+<script src="js/api.js"></script>
+
+<script>
+// ========================================
+// FORM HANDLING
+// ========================================
+
+document.getElementById('qualificationForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+
+  const submitBtn = document.getElementById('submitBtn');
+  const errorMessage = document.getElementById('errorMessage');
+
+  // Disable submit button
+  submitBtn.disabled = true;
+  submitBtn.textContent = 'Submitting...';
+  errorMessage.style.display = 'none';
+
+  try {
+    // Validate API configuration
+    const configValidation = validateAPIConfig();
+    if (!configValidation.valid) {
+      throw new Error(`Configuration Error: ${configValidation.errors.join(', ')}`);
+    }
+
+    // Collect form data
+    const formData = {
+      fullName: document.getElementById('fullName').value.trim(),
+      email: document.getElementById('email').value.trim(),
+      phone: document.getElementById('phone').value.trim(),
+      payingMore: document.querySelector('input[name="payingMore"]:checked').value,
+      shade: document.querySelector('input[name="shade"]:checked').value,
+      inverterOutside: document.querySelector('input[name="inverterOutside"]:checked').value
+    };
+
+    // Calculate score and qualification
+    const score = calculateScore(formData);
+    const qualification = determineQualification(score);
+    const tag = getQualificationTag(qualification);
+
+    // Submit to GoHighLevel
+    await submitToGoHighLevel(formData, score, qualification, tag);
+
+    // Success - show thank you message
+    document.getElementById('solarQualForm').style.display = 'none';
+    document.getElementById('successMessage').style.display = 'block';
+
+    // Optional: Log for debugging (remove in production)
+    console.log('Submission successful:', {
+      score: score,
+      qualification: qualification,
+      tag: tag,
+      breakdown: getScoreBreakdown(formData)
+    });
+
+  } catch (error) {
+    // Error handling
+    console.error('Submission error:', error);
+    errorMessage.textContent = error.message || 'There was an error submitting your information. Please try again or contact support.';
+    errorMessage.style.display = 'block';
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Submit Pre-Qualification';
+  }
+});
+
+// ========================================
+// PHONE NUMBER FORMATTING
+// ========================================
+
+document.getElementById('phone').addEventListener('input', function(e) {
+  // Remove all non-digit characters
+  let value = e.target.value.replace(/\D/g, '');
+
+  // Format as (XXX) XXX-XXXX
+  if (value.length > 0) {
+    if (value.length <= 3) {
+      value = `(${value}`;
+    } else if (value.length <= 6) {
+      value = `(${value.slice(0, 3)}) ${value.slice(3)}`;
+    } else {
+      value = `(${value.slice(0, 3)}) ${value.slice(3, 6)}-${value.slice(6, 10)}`;
+    }
+  }
+
+  e.target.value = value;
+});
+
+// ========================================
+// EMAIL VALIDATION
+// ========================================
+
+document.getElementById('email').addEventListener('blur', function(e) {
+  const email = e.target.value.trim();
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  if (email && !emailRegex.test(email)) {
+    e.target.setCustomValidity('Please enter a valid email address');
+  } else {
+    e.target.setCustomValidity('');
+  }
+});
+
+</script>
+
+</body>
+</html>

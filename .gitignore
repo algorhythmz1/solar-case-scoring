@@ -1,0 +1,49 @@
+# Sensitive Configuration Files
+js/config.local.js
+.env
+.env.local
+.env.production
+
+# API Keys and Secrets
+**/secrets.js
+**/credentials.js
+
+# IDE and Editor Files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Node modules (if using npm for any tooling)
+node_modules/
+package-lock.json
+yarn.lock
+
+# Build and Distribution
+dist/
+build/
+*.log
+
+# Testing
+coverage/
+.nyc_output/
+
+# Temporary Files
+*.tmp
+tmp/
+temp/
+
+# OS Files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Backup Files
+*.bak
+*.backup
+*~.nib
+
+# Documentation Build
+docs/_build/

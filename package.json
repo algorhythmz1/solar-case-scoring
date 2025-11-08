@@ -1,0 +1,39 @@
+{
+  "name": "solar-case-scoring",
+  "version": "1.0.0",
+  "description": "Lightweight solar case qualification system for GoHighLevel landing pages with client-side scoring and automatic lead routing",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx http-server -p 8080 -o",
+    "dev": "npx live-server --port=8080 --open=index.html",
+    "test": "echo \"No tests configured yet\" && exit 0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yourusername/solar-case-scoring.git"
+  },
+  "keywords": [
+    "solar",
+    "qualification",
+    "lead-scoring",
+    "gohighlevel",
+    "crm",
+    "lead-routing",
+    "client-side",
+    "javascript",
+    "form",
+    "landing-page"
+  ],
+  "author": "AlgoRhythmz",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/yourusername/solar-case-scoring/issues"
+  },
+  "homepage": "https://github.com/yourusername/solar-case-scoring#readme",
+  "devDependencies": {},
+  "dependencies": {},
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "private": false
+}
