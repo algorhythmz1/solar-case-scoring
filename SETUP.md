@@ -1,6 +1,6 @@
-# Setup Guide
+# GoHighLevel Setup Guide
 
-This guide will walk you through setting up the Solar Case Scoring System in GoHighLevel.
+This guide will walk you through setting up the Solar Loan Cancellation form in GoHighLevel.
 
 ## Prerequisites
 
@@ -30,7 +30,7 @@ This guide will walk you through setting up the Solar Case Scoring System in GoH
 
 ### 2. Create Custom Fields in GoHighLevel
 
-You need to create custom fields to store the qualification data.
+You need to create custom fields to store the form data.
 
 1. Go to **Settings** > **Custom Fields**
 2. Click **Add Field**
@@ -39,12 +39,19 @@ You need to create custom fields to store the qualification data.
 | Field Name | Field Key | Field Type |
 |------------|-----------|------------|
 | Solar Case Score | `solar_case_score` | Number |
-| Paying More Post Solar | `paying_more_post_solar` | Text |
-| Panels Shaded | `panels_shaded` | Text |
+| State | `state` | Text |
+| Has Solar Loan | `has_solar_loan` | Text |
+| Solar Lender | `solar_lender` | Text |
+| Solar Warranty | `solar_warranty` | Text |
+| Warranty Duration | `warranty_duration` | Text |
+| Installer Status | `installer_status` | Text |
+| Panels Shade | `panels_shade` | Text |
 | Inverter Outside | `inverter_outside` | Text |
+| Electricity Cost | `electricity_cost` | Text |
+| Additional Info | `additional_info` | Text (Long) |
 | Qualification Status | `qualification_status` | Text |
 
-**Important**: The **Field Key** must match exactly what's in the code. You can customize the Field Name to display however you want.
+**Important**: The **Field Key** must match exactly what's in the table above. You can customize the Field Name to display however you want.
 
 ### 3. Create Tags
 
@@ -53,23 +60,23 @@ You need to create custom fields to store the qualification data.
    - `good_solar_case`
    - `low_quality_case`
 
-You can customize these tag names, but make sure to update them in the configuration.
+You can customize these tag names, but make sure to update them in the configuration (Step 4).
 
 ### 4. Configure the Form
 
-#### Option A: Using index.html (Recommended for GHL)
+#### Option A: Using ghl-embed.html (Easiest - Recommended)
 
-1. Open the `index.html` file in a text editor
-2. Find the `CONFIG` object (around line 140)
+1. Open the `ghl-embed.html` file from the repository
+2. Find the `CONFIG` object (around line 413)
 3. Replace the placeholder values:
 
 ```javascript
 const CONFIG = {
   // Replace with your actual API key
-  GHL_API_KEY: 'sk-abc123def456...',  // Your actual key
+  GHL_API_KEY: 'YOUR_GHL_API_KEY_HERE',
 
   // Replace with your actual Location ID
-  GHL_LOCATION_ID: 'abc123def456...',  // Your actual ID
+  GHL_LOCATION_ID: 'YOUR_LOCATION_ID_HERE',
 
   // Leave this as-is unless using API v2
   GHL_API_URL: 'https://rest.gohighlevel.com/v1/contacts/',
@@ -88,39 +95,50 @@ const CONFIG = {
     unqualified: 'low_quality_case'
   },
 
-  // Update field keys if you used different ones
+  // Custom field keys (must match what you created in Step 2)
   CUSTOM_FIELDS: {
     score: 'solar_case_score',
-    payingMore: 'paying_more_post_solar',
-    shade: 'panels_shaded',
+    state: 'state',
+    hasLoan: 'has_solar_loan',
+    lender: 'solar_lender',
+    warranty: 'solar_warranty',
+    warrantyDuration: 'warranty_duration',
+    installerStatus: 'installer_status',
+    panelsShade: 'panels_shade',
     inverterOutside: 'inverter_outside',
+    electricityCost: 'electricity_cost',
+    additionalInfo: 'additional_info',
     qualification: 'qualification_status'
   }
 };
 ```
 
-#### Option B: Using Modular Files
+4. Save the file with your updated credentials
 
-1. Edit `js/config.js` with your credentials
-2. Upload all files (HTML, CSS, JS) to your web hosting
-3. Link to the hosted files from your GoHighLevel page
+#### Option B: Using index.html (Full HTML Version)
+
+1. Open the `index.html` file
+2. Find the `CONFIG` object (around line 424)
+3. Replace the same values as shown in Option A above
 
 ### 5. Add to GoHighLevel Page
 
 #### Method 1: Custom Code Element (Recommended)
 
 1. Open your GoHighLevel page in the page builder
-2. Drag a **Custom Code** element onto the page
-3. Copy the **entire contents** of `index.html`
+2. Drag a **Custom Code** element onto the page where you want the form
+3. **Copy the entire contents** of `ghl-embed.html` (this is the ready-to-paste version)
 4. Paste into the Custom Code element
-5. Save the element
-6. Save and publish your page
+5. Click **Save** on the element
+6. Save and **Publish** your page
 
 #### Method 2: Custom HTML Section
 
 1. In the page builder, add a **Custom HTML** section
-2. Paste the contents of `index.html`
+2. Paste the contents of `ghl-embed.html`
 3. Save and publish
+
+**Note**: Use `ghl-embed.html` for GoHighLevel - it's already formatted without the outer HTML tags that GHL provides.
 
 ### 6. Test the Integration
 
@@ -131,45 +149,51 @@ const CONFIG = {
 5. Verify in GoHighLevel:
    - New contact was created
    - Contact has the correct tag
-   - Custom fields are populated
+   - All custom fields are populated
    - Score is calculated correctly
 
 #### Test Scenarios
 
-**Test 1: Qualified Lead**
-- Paying more: Yes (+50)
-- Shaded: Yes (+30)
-- Inverter outside: Yes (+20)
-- **Total**: 100 points → Should be tagged `good_solar_case`
+**Test 1: Has Loan - Qualified Lead**
+- State: Any state
+- Has loan: Yes
+- Lender: GoodLeap (or any lender)
+- **Expected**: Should be tagged `good_solar_case`
 
-**Test 2: Unqualified Lead**
-- Paying more: No (0)
-- Shaded: No (0)
-- Inverter outside: Yes (+20)
-- **Total**: 20 points → Should be tagged `low_quality_case`
+**Test 2: No Loan - Unqualified Lead**
+- State: Any state
+- Has loan: No
+- Lender: Any
+- **Expected**: Should be tagged `low_quality_case`
+
+**Test 3: Full Conditional Flow**
+1. Select lender: Mosaic, GoodLeap, or Other → Shows warranty question
+2. Select warranty: Yes → Shows warranty duration question
+3. Select warranty 5+ years: Yes → Shows installer status question
+4. Select installer responsive: No → Shows 4 additional questions (shade, inverter, cost, additional info)
 
 ### 7. Troubleshooting
 
 #### Form doesn't submit
 
-1. Open browser console (F12)
+1. Open browser console (F12 > Console tab)
 2. Check for error messages
 3. Common issues:
    - API key incorrect or expired
    - Location ID incorrect
-   - CORS issues (API v2 might need different setup)
+   - Custom field keys don't match exactly
 
-#### Custom fields not showing
+#### Custom fields not showing in GoHighLevel
 
-1. Verify field keys match exactly in GHL and code
+1. Verify field keys match **exactly** (case-sensitive) in GHL and code
 2. Check that fields are created in the correct location
-3. Ensure field types are correct
+3. Ensure field types are correct (Number for score, Text for others)
 
 #### Tags not applying
 
 1. Verify tags exist in your GHL tag library
 2. Check tag names match exactly (case-sensitive)
-3. Check API permissions allow tag modification
+3. Check API key has permission to add tags
 
 #### API Error 401 (Unauthorized)
 
@@ -181,31 +205,53 @@ const CONFIG = {
 - Your Location ID might be incorrect
 - Check the API endpoint URL (v1 vs v2)
 
-#### CORS Errors
+#### Form shows but fields don't appear conditionally
 
-- If using modular files hosted externally
-- Try using the single-file `index.html` version instead
-- Or ensure your hosting allows CORS requests
+- Make sure JavaScript is running (check browser console)
+- Verify there are no JavaScript errors in console
+- Try refreshing the page
 
 ### 8. GoHighLevel Automation (Optional)
 
-You can set up automations to trigger when contacts are tagged:
+Set up automations to trigger when contacts are tagged:
 
+**For Qualified Leads:**
 1. Go to **Automation** > **Workflows**
 2. Create a new workflow
 3. Set trigger: **Tag Applied** → `good_solar_case`
 4. Add actions:
-   - Send email notification to sales team
+   - Send email to sales team
    - Assign to specific user
-   - Add to campaign
-   - Send SMS
-   - etc.
+   - Add to high-priority campaign
+   - Send immediate follow-up SMS
+   - Create calendar appointment
 
-Repeat for `low_quality_case` tag with different actions.
+**For Unqualified Leads:**
+1. Create another workflow
+2. Set trigger: **Tag Applied** → `low_quality_case`
+3. Add actions:
+   - Add to nurture campaign
+   - Send educational email series
+   - Schedule follow-up for later date
+
+## Form Fields Explained
+
+The form collects the following information:
+
+1. **What state do you live in?** - 50 US states dropdown
+2. **Do you currently have a loan for your solar panels?** - Yes/No
+3. **Who is your lender?** - 12 lender options
+4. **Did your solar system come with a warranty?** *(Conditional: Shows only for Mosaic, GoodLeap, Other)*
+5. **Was your warranty 5 years or longer?** *(Conditional: Shows if warranty = Yes)*
+6. **Is your installer out of business?** *(Conditional: Shows if warranty duration = Yes)*
+7. **Are your panels covered in shade?** *(Conditional: Shows if installer status = No)*
+8. **Is your inverter box outside?** *(Conditional: Shows if installer status = No)*
+9. **Electricity cost comparison** *(Conditional: Shows if installer status = No)*
+10. **Additional information** *(Conditional: Optional text area if installer status = No)*
 
 ## API Version Notes
 
-### Using API v1 (Default)
+### Using API v1 (Default - Recommended)
 
 ```javascript
 GHL_API_URL: 'https://rest.gohighlevel.com/v1/contacts/'
@@ -219,48 +265,48 @@ GHL_API_URL: 'https://services.leadconnectorhq.com/contacts/'
 
 You may need to adjust the request payload structure for v2. Check GoHighLevel API documentation for details.
 
-## Security Best Practices
+## Security Considerations
 
-### For Testing/Internal Use
-- Current setup is fine - API key in client-side code
+**⚠️ Important**: The current implementation includes the API key in client-side code. This is suitable for:
+- Internal tools
+- Low-volume applications
+- Development/testing
 
-### For Production/Public Use
-
-Consider these alternatives:
+**For high-security production environments**, consider:
 
 1. **Use GHL Form Webhook**
    - Create a GoHighLevel form
    - Set up a webhook to receive submissions
    - Process scoring on a serverless function
-   - More secure - no exposed API key
+   - API key never exposed to client
 
 2. **Backend Proxy**
    - Set up Cloudflare Worker or AWS Lambda
    - Form submits to your proxy
    - Proxy adds API key and submits to GHL
-   - API key never exposed to client
-
-3. **Environment Variables**
-   - Use server-side rendering
-   - Inject credentials from environment variables
-   - Never commit real keys to version control
+   - API key never exposed
 
 ## Next Steps
 
-- Customize the scoring logic → See [SCORING_GUIDE.md](SCORING_GUIDE.md)
-- Adjust configuration → See [CONFIGURATION.md](CONFIGURATION.md)
+- Customize the form styling if needed (edit the `<style>` section)
+- Adjust scoring logic → See [SCORING_GUIDE.md](SCORING_GUIDE.md)
+- Fine-tune configuration → See [CONFIGURATION.md](CONFIGURATION.md)
 - Set up automation workflows in GoHighLevel
-- Monitor and optimize conversion rates
+- Monitor form submissions and conversion rates
 
 ## Support
 
 If you encounter issues:
-1. Check browser console for error messages
-2. Verify all credentials are correct
+1. Check browser console (F12) for error messages
+2. Verify all credentials are correct and fields match exactly
 3. Test with API v1 endpoint first
 4. Review GoHighLevel API documentation
 5. Open an issue on GitHub
 
 ---
 
-**Need help?** Check the other documentation files or open an issue on GitHub.
+**Quick Reference**:
+- **Form file**: `ghl-embed.html` (easiest for GHL)
+- **Full version**: `index.html` (standalone page)
+- **Config location**: Around line 413-463 in ghl-embed.html
+- **Tags to create**: `good_solar_case`, `low_quality_case`
