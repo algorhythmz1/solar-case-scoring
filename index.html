@@ -539,6 +539,10 @@ document.getElementById('qualificationForm').addEventListener('submit', async fu
     const qualification = determineQualification(score);
     const tag = getQualificationTag(qualification);
 
+    // ===== DEMO MODE: GHL API DISABLED FOR TESTING =====
+    // Uncomment the code below when ready to use with real GoHighLevel credentials
+
+    /*
     // Prepare GHL payload
     const payload = {
       tags: [tag],
@@ -608,9 +612,11 @@ document.getElementById('qualificationForm').addEventListener('submit', async fu
       const errorData = await response.json().catch(() => ({}));
       throw new Error(`API Error: ${response.status} - ${errorData.message || response.statusText}`);
     }
+    */
 
-    // Optional: Log for debugging (remove in production)
-    console.log('Submission successful:', {
+    // Log for debugging
+    console.log('DEMO MODE - Score calculated:', {
+      formData: formData,
       score: score,
       qualification: qualification,
       tag: tag
