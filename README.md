@@ -14,15 +14,17 @@ A lightweight, client-side qualification system for solar cases that integrates 
 
 1. Presents a pre-qualification form to potential solar case leads
 2. Collects contact information and qualification questions
-3. Calculates a deterministic score based on answers
-4. Determines qualification status (qualified/unqualified)
-5. Submits lead data to GoHighLevel with:
-   - Contact details (name, email, phone)
-   - Raw survey answers
+3. Uses conditional logic to show/hide relevant questions based on responses
+4. Calculates a deterministic score based on answers
+5. Determines qualification status (qualified/unqualified)
+6. Submits lead data to GoHighLevel with:
+   - All survey answers
    - Calculated score
    - Qualification status
    - Routing tag
-6. Shows a thank you message
+7. Redirects to appropriate result page:
+   - High-score page for qualified leads
+   - Low-score page for unqualified leads
 
 ## 🚀 Quick Start
 
@@ -46,18 +48,26 @@ A lightweight, client-side qualification system for solar cases that integrates 
 
 See [SETUP.md](SETUP.md) for detailed instructions.
 
-## 📊 Default Scoring Logic
+## 📊 Scoring Logic
+
+The system calculates a qualification score based on conditional questions that appear when the installer is not responsive.
 
 | Question | Answer | Points |
 |----------|--------|--------|
-| Paying MORE for electricity post-solar? | Yes | +50 |
-| Solar panels shaded during the day? | Yes | +30 |
-| Inverter mounted outside? | Yes | +20 |
+| Panels covered in shade? | Yes | +30 |
+| Panels covered in shade? | No | 0 |
+| Inverter installed outside? | Yes | +20 |
+| Inverter installed outside? | No | 0 |
+| Electricity costs | Paying more after installation | +50 |
+| Electricity costs | Breaking even | +25 |
+| Electricity costs | Saving money | 0 |
 
 **Qualification Threshold**: 60 points
 
-- Score ≥ 60 → Tagged as `good_solar_case`
-- Score < 60 → Tagged as `low_quality_case`
+- Score ≥ 60 → Qualified (redirects to high-score result page)
+- Score < 60 → Not Qualified (redirects to low-score result page)
+
+**Note**: Scoring only applies when users follow the conditional path where installer status = "No".
 
 ## 🔧 Customization
 
@@ -99,6 +109,9 @@ TAGS: {
 ```
 solar-case-scoring/
 ├── index.html              # All-in-one version (recommended for GHL)
+├── ghl-embed.html          # GoHighLevel embed version (copy-paste ready)
+├── result-high-score.html  # Qualified leads result page
+├── result-low-score.html   # Unqualified leads result page
 ├── index-modular.html      # Modular version
 ├── css/
 │   └── styles.css          # Separated styles

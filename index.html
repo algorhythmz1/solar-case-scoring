@@ -469,16 +469,26 @@ const CONFIG = {
 function calculateScore(formData) {
   let score = 0;
 
-  // Apply scoring rules based on new form fields
-  // If they have a loan, they qualify
-  if (formData.hasLoan === 'yes') {
-    score += 100;
-  }
+  // Scoring only applies when installer status = "no" (the additional fields path)
+  // These conditional fields only show when installer is not responsive
+  if (formData.installerStatus === 'no') {
+    // Panels covered in shade - higher score if yes
+    if (formData.panelsShade === 'yes') {
+      score += 30;
+    }
 
-  // Certain lenders might score higher
-  const highPriorityLenders = ['Mosaic', 'GoodLeap', 'Sunlight Financial'];
-  if (highPriorityLenders.includes(formData.lender)) {
-    score += 20;
+    // Inverter outside - higher score if yes
+    if (formData.inverterOutside === 'yes') {
+      score += 20;
+    }
+
+    // Electricity cost comparison
+    if (formData.electricityCost === 'paying_more_after') {
+      score += 50;
+    } else if (formData.electricityCost === 'breaking_even') {
+      score += 25;
+    }
+    // saving_money = 0 points (no addition needed)
   }
 
   return score;
@@ -599,16 +609,19 @@ document.getElementById('qualificationForm').addEventListener('submit', async fu
       throw new Error(`API Error: ${response.status} - ${errorData.message || response.statusText}`);
     }
 
-    // Success - show thank you message
-    document.getElementById('solarQualForm').style.display = 'none';
-    document.getElementById('successMessage').style.display = 'block';
-
     // Optional: Log for debugging (remove in production)
     console.log('Submission successful:', {
       score: score,
       qualification: qualification,
       tag: tag
     });
+
+    // Redirect to appropriate result page based on score
+    if (qualification === 'qualified') {
+      window.location.href = 'result-high-score.html';
+    } else {
+      window.location.href = 'result-low-score.html';
+    }
 
   } catch (error) {
     // Error handling

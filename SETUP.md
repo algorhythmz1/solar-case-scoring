@@ -249,6 +249,45 @@ The form collects the following information:
 9. **Electricity cost comparison** *(Conditional: Shows if installer status = No)*
 10. **Additional information** *(Conditional: Optional text area if installer status = No)*
 
+## Scoring System
+
+The qualification system calculates a score based on answers to the conditional questions (fields 7-9) that appear when the installer is not responsive (installer status = No).
+
+### Point Allocation
+
+| Question | Answer | Points |
+|----------|--------|--------|
+| Panels covered in shade? | Yes | +30 |
+| Panels covered in shade? | No | 0 |
+| Inverter installed outside? | Yes | +20 |
+| Inverter installed outside? | No | 0 |
+| Electricity costs | Paying more after installation | +50 |
+| Electricity costs | Breaking even | +25 |
+| Electricity costs | Saving money | 0 |
+
+### Qualification Threshold
+
+- **Score ≥ 60 points** → Qualified (redirects to high-score result page)
+- **Score < 60 points** → Not Qualified (redirects to low-score result page)
+
+**Note**: Scoring only applies when the user follows the conditional path where installer status = "No". If the installer is responsive (status = "Yes"), the conditional questions don't appear and the score remains 0.
+
+## Result Pages
+
+After form submission, users are redirected to one of two result pages:
+
+### High Score Page (result-high-score.html)
+- Displays encouraging message: "Let's Start Your Path To Solar Panel Relief"
+- Explains next steps in the process
+- Provides contact information for immediate assistance
+- Shown when score ≥ 60 points
+
+### Low Score Page (result-low-score.html)
+- Politely explains why the case doesn't meet criteria
+- Lists factors that constitute a strong case
+- Offers alternative resources and educational content
+- Shown when score < 60 points
+
 ## API Version Notes
 
 ### Using API v1 (Default - Recommended)
