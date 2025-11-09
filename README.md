@@ -6,10 +6,8 @@ A lightweight, client-side qualification system for solar cases that integrates 
 
 - **Client-Side Scoring**: All scoring logic runs in the browser - no backend required
 - **GoHighLevel Integration**: Direct API integration for seamless lead capture
-- **Automatic Tagging**: Qualified and unqualified leads are automatically tagged
 - **Customizable Scoring**: Easy-to-modify scoring rules via configuration
 - **Responsive Design**: Works perfectly on desktop and mobile devices
-- **Self-Contained**: Single HTML file option or modular file structure
 - **No Build Tools**: Copy-paste ready for GoHighLevel custom code blocks
 
 ## 📋 What It Does
