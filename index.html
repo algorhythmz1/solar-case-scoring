@@ -4,6 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Solar Case Pre-Qualification</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet">
   <style>
     * {
       margin: 0;
@@ -12,8 +15,8 @@
     }
 
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      font-family: 'Lato', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background: #fcfbff;
       min-height: 100vh;
       display: flex;
       align-items: center;
@@ -25,22 +28,45 @@
       max-width: 600px;
       width: 100%;
       margin: 0 auto;
-      padding: 40px;
-      background: white;
-      border-radius: 12px;
+      padding: 1px;
+      background: #000000;
+      border: 1px solid #000000;
+      border-radius: 0;
       box-shadow: 0 10px 40px rgba(0,0,0,0.2);
     }
 
+    .form-inner {
+      background: #ffffff;
+      padding: 40px;
+    }
+
     .solar-qual-form h2 {
-      color: #333;
-      margin-bottom: 10px;
-      font-size: 28px;
+      color: #C59A3C;
+      margin-bottom: 15px;
+      font-size: 22px;
+      font-family: 'Lato', sans-serif;
+      text-align: center;
+      font-weight: 700;
     }
 
     .solar-qual-form .subtitle {
-      color: #666;
+      color: #000000;
+      margin-bottom: 15px;
+      font-size: 22px;
+      font-family: 'Lato', sans-serif;
+      text-align: center;
+      font-weight: 400;
+    }
+
+    .step-indicator {
+      background: #C59A3C;
+      color: #FFFFFF;
+      text-align: center;
+      padding: 8px 16px;
+      font-family: 'Lato', sans-serif;
+      font-size: 22px;
+      font-weight: 700;
       margin-bottom: 30px;
-      font-size: 14px;
     }
 
     .form-group {
@@ -50,27 +76,51 @@
     .form-group label {
       display: block;
       margin-bottom: 8px;
-      font-weight: 600;
+      font-weight: 400;
       color: #333;
-      font-size: 14px;
+      font-size: 20px;
+      font-family: 'Lato', sans-serif;
     }
 
     .form-group input[type="text"],
     .form-group input[type="email"],
-    .form-group input[type="tel"] {
+    .form-group input[type="tel"],
+    .form-group select {
       width: 100%;
       padding: 12px 16px;
       border: 2px solid #e0e0e0;
       border-radius: 6px;
-      font-size: 15px;
+      font-size: 22px;
+      font-family: 'Lato', sans-serif;
+      transition: border-color 0.3s;
+      background-color: #ffffff !important;
+    }
+
+    .form-group select option {
+      font-size: 22px;
+      font-family: 'Lato', sans-serif;
+      background-color: #ffffff !important;
+    }
+
+    .form-textarea {
+      width: 100%;
+      padding: 12px 16px;
+      border: 2px solid #e0e0e0;
+      border-radius: 6px;
+      font-size: 22px;
+      font-family: 'Lato', sans-serif;
+      background-color: #ffffff !important;
+      resize: vertical;
       transition: border-color 0.3s;
     }
 
     .form-group input[type="text"]:focus,
     .form-group input[type="email"]:focus,
-    .form-group input[type="tel"]:focus {
+    .form-group input[type="tel"]:focus,
+    .form-group select:focus,
+    .form-textarea:focus {
       outline: none;
-      border-color: #667eea;
+      border-color: #C59A3C;
     }
 
     .radio-group {
@@ -83,6 +133,7 @@
       display: flex;
       align-items: center;
       font-weight: normal;
+      font-family: 'Lato', sans-serif;
       cursor: pointer;
       padding: 10px 16px;
       border: 2px solid #e0e0e0;
@@ -109,13 +160,14 @@
     }
 
     .submit-btn {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: #c49a3b;
       color: white;
-      padding: 14px 30px;
+      padding: 30px;
       border: none;
-      border-radius: 6px;
-      font-size: 16px;
-      font-weight: 600;
+      border-radius: 5px;
+      font-size: 24px;
+      font-weight: 700;
+      font-family: 'Lato', sans-serif;
       cursor: pointer;
       width: 100%;
       transition: transform 0.2s, box-shadow 0.2s;
@@ -124,7 +176,7 @@
 
     .submit-btn:hover {
       transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+      box-shadow: 0 6px 20px rgba(196, 154, 59, 0.4);
     }
 
     .submit-btn:active {
@@ -173,10 +225,15 @@
       margin-bottom: 20px;
       display: none;
       font-size: 14px;
+      font-family: 'Lato', sans-serif;
     }
 
     .required {
       color: #dc2626;
+    }
+
+    .hidden {
+      display: none;
     }
 
     @media (max-width: 600px) {
@@ -194,73 +251,163 @@
 <body>
 
 <div class="solar-qual-form" id="solarQualForm">
-  <h2>Solar Case Pre-Qualification</h2>
-  <p class="subtitle">Help us understand your solar situation</p>
+  <div class="form-inner">
+    <h2>SOLAR LOAN CANCELLATION</h2>
+    <p class="subtitle">No-Cost Claim Review</p>
+    <div class="step-indicator">Step 1 of 2</div>
 
-  <div class="error-message" id="errorMessage"></div>
+    <div class="error-message" id="errorMessage"></div>
 
-  <form id="qualificationForm">
-    <!-- Contact Information -->
-    <div class="form-group">
-      <label for="fullName">Full Name <span class="required">*</span></label>
-      <input type="text" id="fullName" name="fullName" required placeholder="John Doe">
-    </div>
-
-    <div class="form-group">
-      <label for="email">Email Address <span class="required">*</span></label>
-      <input type="email" id="email" name="email" required placeholder="john@example.com">
-    </div>
-
-    <div class="form-group">
-      <label for="phone">Phone Number <span class="required">*</span></label>
-      <input type="tel" id="phone" name="phone" required placeholder="(555) 123-4567">
-    </div>
-
+    <form id="qualificationForm">
     <!-- Qualification Questions -->
     <div class="form-group">
-      <label>Are you paying MORE for electricity after going solar? <span class="required">*</span></label>
-      <div class="radio-group">
-        <label>
-          <input type="radio" name="payingMore" value="yes" required>
-          <span>Yes</span>
-        </label>
-        <label>
-          <input type="radio" name="payingMore" value="no">
-          <span>No</span>
-        </label>
-      </div>
+      <label for="state">What state do you live in? <span class="required">*</span></label>
+      <select id="state" name="state" required>
+        <option value="">Select your state</option>
+        <option value="AL">AL</option>
+        <option value="AK">AK</option>
+        <option value="AZ">AZ</option>
+        <option value="AR">AR</option>
+        <option value="CA">CA</option>
+        <option value="CO">CO</option>
+        <option value="CT">CT</option>
+        <option value="DE">DE</option>
+        <option value="FL">FL</option>
+        <option value="GA">GA</option>
+        <option value="HI">HI</option>
+        <option value="ID">ID</option>
+        <option value="IL">IL</option>
+        <option value="IN">IN</option>
+        <option value="IA">IA</option>
+        <option value="KS">KS</option>
+        <option value="KY">KY</option>
+        <option value="LA">LA</option>
+        <option value="ME">ME</option>
+        <option value="MD">MD</option>
+        <option value="MA">MA</option>
+        <option value="MI">MI</option>
+        <option value="MN">MN</option>
+        <option value="MS">MS</option>
+        <option value="MO">MO</option>
+        <option value="MT">MT</option>
+        <option value="NE">NE</option>
+        <option value="NV">NV</option>
+        <option value="NH">NH</option>
+        <option value="NJ">NJ</option>
+        <option value="NM">NM</option>
+        <option value="NY">NY</option>
+        <option value="NC">NC</option>
+        <option value="ND">ND</option>
+        <option value="OH">OH</option>
+        <option value="OK">OK</option>
+        <option value="OR">OR</option>
+        <option value="PA">PA</option>
+        <option value="RI">RI</option>
+        <option value="SC">SC</option>
+        <option value="SD">SD</option>
+        <option value="TN">TN</option>
+        <option value="TX">TX</option>
+        <option value="UT">UT</option>
+        <option value="VT">VT</option>
+        <option value="VA">VA</option>
+        <option value="WA">WA</option>
+        <option value="WV">WV</option>
+        <option value="WI">WI</option>
+        <option value="WY">WY</option>
+      </select>
     </div>
 
     <div class="form-group">
-      <label>Are your solar panels shaded at any part of the day? <span class="required">*</span></label>
-      <div class="radio-group">
-        <label>
-          <input type="radio" name="shade" value="yes" required>
-          <span>Yes</span>
-        </label>
-        <label>
-          <input type="radio" name="shade" value="no">
-          <span>No</span>
-        </label>
-      </div>
+      <label for="hasLoan">Do you currently have a loan for your solar panels? <span class="required">*</span></label>
+      <select id="hasLoan" name="hasLoan" required>
+        <option value="">Select an option</option>
+        <option value="yes">Yes</option>
+        <option value="no">No</option>
+      </select>
     </div>
 
     <div class="form-group">
-      <label>Is the inverter mounted on the outside of your house? <span class="required">*</span></label>
-      <div class="radio-group">
-        <label>
-          <input type="radio" name="inverterOutside" value="yes" required>
-          <span>Yes</span>
-        </label>
-        <label>
-          <input type="radio" name="inverterOutside" value="no">
-          <span>No</span>
-        </label>
-      </div>
+      <label for="lender">Who is your lender? <span class="required">*</span></label>
+      <select id="lender" name="lender" required>
+        <option value="">Select your lender</option>
+        <option value="Mosaic">Mosaic</option>
+        <option value="GoodLeap">GoodLeap</option>
+        <option value="Sunlight Financial">Sunlight Financial</option>
+        <option value="Dividend">Dividend</option>
+        <option value="Service Financial">Service Financial</option>
+        <option value="Sunnova">Sunnova</option>
+        <option value="Everbright">Everbright</option>
+        <option value="Genisys Credit Union">Genisys Credit Union</option>
+        <option value="Technology Credit Union">Technology Credit Union</option>
+        <option value="Halo">Halo</option>
+        <option value="First Light Federal Credit Union">First Light Federal Credit Union</option>
+        <option value="Other">Other</option>
+      </select>
     </div>
 
-    <button type="submit" class="submit-btn" id="submitBtn">Submit Pre-Qualification</button>
+    <div class="form-group hidden" id="warrantyGroup">
+      <label for="warranty">Did your solar system come with a warranty? <span class="required">*</span></label>
+      <select id="warranty" name="warranty">
+        <option value="">Select an option</option>
+        <option value="yes">Yes</option>
+        <option value="no">No</option>
+      </select>
+    </div>
+
+    <div class="form-group hidden" id="warrantyDurationGroup">
+      <label for="warrantyDuration">Was your warranty 5 years or longer? <span class="required">*</span></label>
+      <select id="warrantyDuration" name="warrantyDuration">
+        <option value="">Select an option</option>
+        <option value="yes">Yes</option>
+        <option value="no">No</option>
+      </select>
+    </div>
+
+    <div class="form-group hidden" id="installerStatusGroup">
+      <label for="installerStatus">Is your installer out of business or no longer responding to your warranty requests? <span class="required">*</span></label>
+      <select id="installerStatus" name="installerStatus">
+        <option value="">Select an option</option>
+        <option value="yes">Yes</option>
+        <option value="no">No</option>
+      </select>
+    </div>
+
+    <div class="form-group hidden" id="panelsShadeGroup">
+      <label for="panelsShade">Are your panels covered in full or partial shade at any part during the day? <span class="required">*</span></label>
+      <select id="panelsShade" name="panelsShade">
+        <option value="">Select an option</option>
+        <option value="yes">Yes</option>
+        <option value="no">No</option>
+      </select>
+    </div>
+
+    <div class="form-group hidden" id="inverterOutsideGroup">
+      <label for="inverterOutside">Is your inverter box installed on the outside of your house/system? <span class="required">*</span></label>
+      <select id="inverterOutside" name="inverterOutside">
+        <option value="">Select an option</option>
+        <option value="yes">Yes</option>
+        <option value="no">No</option>
+      </select>
+    </div>
+
+    <div class="form-group hidden" id="electricityCostGroup">
+      <label for="electricityCost">Are you paying more money for electricity before solar was installed or after solar was installed (electricity plus loan payment)? <span class="required">*</span></label>
+      <select id="electricityCost" name="electricityCost">
+        <option value="">Select an option</option>
+        <option value="paying_more_after">I'm paying more money after the installation</option>
+        <option value="saving_money">The solar panels are actually saving me money</option>
+        <option value="breaking_even">I'm just about breaking even for my payments</option>
+      </select>
+    </div>
+
+    <div class="form-group hidden" id="additionalInfoGroup">
+      <label for="additionalInfo">Is there anything else we need to know?</label>
+      <textarea id="additionalInfo" name="additionalInfo" rows="4" class="form-textarea"></textarea>
+    </div>
+
+    <button type="submit" class="submit-btn" id="submitBtn">DO I QUALIFY?</button>
   </form>
+  </div>
 </div>
 
 <div class="success-message" id="successMessage">
@@ -301,9 +448,16 @@ const CONFIG = {
   // Custom Field Keys (map these to your GHL custom fields)
   CUSTOM_FIELDS: {
     score: 'solar_case_score',
-    payingMore: 'paying_more_post_solar',
-    shade: 'panels_shaded',
+    state: 'state',
+    hasLoan: 'has_solar_loan',
+    lender: 'solar_lender',
+    warranty: 'solar_warranty',
+    warrantyDuration: 'warranty_duration',
+    installerStatus: 'installer_status',
+    panelsShade: 'panels_shade',
     inverterOutside: 'inverter_outside',
+    electricityCost: 'electricity_cost',
+    additionalInfo: 'additional_info',
     qualification: 'qualification_status'
   }
 };
@@ -315,17 +469,16 @@ const CONFIG = {
 function calculateScore(formData) {
   let score = 0;
 
-  // Apply scoring rules
-  if (formData.payingMore === 'yes') {
-    score += CONFIG.SCORING.payingMoreYes;
+  // Apply scoring rules based on new form fields
+  // If they have a loan, they qualify
+  if (formData.hasLoan === 'yes') {
+    score += 100;
   }
 
-  if (formData.shade === 'yes') {
-    score += CONFIG.SCORING.shadeYes;
-  }
-
-  if (formData.inverterOutside === 'yes') {
-    score += CONFIG.SCORING.inverterOutsideYes;
+  // Certain lenders might score higher
+  const highPriorityLenders = ['Mosaic', 'GoodLeap', 'Sunlight Financial'];
+  if (highPriorityLenders.includes(formData.lender)) {
+    score += 20;
   }
 
   return score;
@@ -359,12 +512,16 @@ document.getElementById('qualificationForm').addEventListener('submit', async fu
   try {
     // Collect form data
     const formData = {
-      fullName: document.getElementById('fullName').value.trim(),
-      email: document.getElementById('email').value.trim(),
-      phone: document.getElementById('phone').value.trim(),
-      payingMore: document.querySelector('input[name="payingMore"]:checked').value,
-      shade: document.querySelector('input[name="shade"]:checked').value,
-      inverterOutside: document.querySelector('input[name="inverterOutside"]:checked').value
+      state: document.getElementById('state').value,
+      hasLoan: document.getElementById('hasLoan').value,
+      lender: document.getElementById('lender').value,
+      warranty: document.getElementById('warranty').value || 'N/A',
+      warrantyDuration: document.getElementById('warrantyDuration').value || 'N/A',
+      installerStatus: document.getElementById('installerStatus').value || 'N/A',
+      panelsShade: document.getElementById('panelsShade').value || 'N/A',
+      inverterOutside: document.getElementById('inverterOutside').value || 'N/A',
+      electricityCost: document.getElementById('electricityCost').value || 'N/A',
+      additionalInfo: document.getElementById('additionalInfo').value || ''
     };
 
     // Calculate score
@@ -374,9 +531,6 @@ document.getElementById('qualificationForm').addEventListener('submit', async fu
 
     // Prepare GHL payload
     const payload = {
-      email: formData.email,
-      phone: formData.phone,
-      name: formData.fullName,
       tags: [tag],
       customFields: [
         {
@@ -384,16 +538,44 @@ document.getElementById('qualificationForm').addEventListener('submit', async fu
           field_value: score.toString()
         },
         {
-          key: CONFIG.CUSTOM_FIELDS.payingMore,
-          field_value: formData.payingMore
+          key: CONFIG.CUSTOM_FIELDS.state,
+          field_value: formData.state
         },
         {
-          key: CONFIG.CUSTOM_FIELDS.shade,
-          field_value: formData.shade
+          key: CONFIG.CUSTOM_FIELDS.hasLoan,
+          field_value: formData.hasLoan
+        },
+        {
+          key: CONFIG.CUSTOM_FIELDS.lender,
+          field_value: formData.lender
+        },
+        {
+          key: CONFIG.CUSTOM_FIELDS.warranty,
+          field_value: formData.warranty
+        },
+        {
+          key: CONFIG.CUSTOM_FIELDS.warrantyDuration,
+          field_value: formData.warrantyDuration
+        },
+        {
+          key: CONFIG.CUSTOM_FIELDS.installerStatus,
+          field_value: formData.installerStatus
+        },
+        {
+          key: CONFIG.CUSTOM_FIELDS.panelsShade,
+          field_value: formData.panelsShade
         },
         {
           key: CONFIG.CUSTOM_FIELDS.inverterOutside,
           field_value: formData.inverterOutside
+        },
+        {
+          key: CONFIG.CUSTOM_FIELDS.electricityCost,
+          field_value: formData.electricityCost
+        },
+        {
+          key: CONFIG.CUSTOM_FIELDS.additionalInfo,
+          field_value: formData.additionalInfo
         },
         {
           key: CONFIG.CUSTOM_FIELDS.qualification,
@@ -434,46 +616,135 @@ document.getElementById('qualificationForm').addEventListener('submit', async fu
     errorMessage.textContent = 'There was an error submitting your information. Please try again or contact support.';
     errorMessage.style.display = 'block';
     submitBtn.disabled = false;
-    submitBtn.textContent = 'Submit Pre-Qualification';
+    submitBtn.textContent = 'DO I QUALIFY?';
   }
 });
 
 // ========================================
-// PHONE NUMBER FORMATTING
+// FORM VALIDATION & INTERACTIVITY
 // ========================================
 
-document.getElementById('phone').addEventListener('input', function(e) {
-  // Remove all non-digit characters
-  let value = e.target.value.replace(/\D/g, '');
+// Show/hide warranty field based on lender selection
+document.getElementById('lender').addEventListener('change', function() {
+  const lenderValue = this.value;
+  const warrantyGroup = document.getElementById('warrantyGroup');
+  const warrantyField = document.getElementById('warranty');
+  const warrantyDurationGroup = document.getElementById('warrantyDurationGroup');
+  const warrantyDurationField = document.getElementById('warrantyDuration');
 
-  // Format as (XXX) XXX-XXXX
-  if (value.length > 0) {
-    if (value.length <= 3) {
-      value = `(${value}`;
-    } else if (value.length <= 6) {
-      value = `(${value.slice(0, 3)}) ${value.slice(3)}`;
-    } else {
-      value = `(${value.slice(0, 3)}) ${value.slice(3, 6)}-${value.slice(6, 10)}`;
-    }
-  }
+  // Show warranty field only for Mosaic, GoodLeap, or Other
+  const showWarranty = ['Mosaic', 'GoodLeap', 'Other'].includes(lenderValue);
 
-  e.target.value = value;
-});
-
-// ========================================
-// EMAIL VALIDATION
-// ========================================
-
-document.getElementById('email').addEventListener('blur', function(e) {
-  const email = e.target.value.trim();
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-  if (email && !emailRegex.test(email)) {
-    e.target.setCustomValidity('Please enter a valid email address');
+  if (showWarranty) {
+    warrantyGroup.classList.remove('hidden');
+    warrantyField.setAttribute('required', 'required');
   } else {
-    e.target.setCustomValidity('');
+    warrantyGroup.classList.add('hidden');
+    warrantyField.removeAttribute('required');
+    warrantyField.value = ''; // Reset value when hidden
+
+    // Also hide warranty duration field
+    warrantyDurationGroup.classList.add('hidden');
+    warrantyDurationField.removeAttribute('required');
+    warrantyDurationField.value = '';
   }
 });
+
+// Show/hide warranty duration field based on warranty selection
+document.getElementById('warranty').addEventListener('change', function() {
+  const warrantyValue = this.value;
+  const warrantyDurationGroup = document.getElementById('warrantyDurationGroup');
+  const warrantyDurationField = document.getElementById('warrantyDuration');
+  const installerStatusGroup = document.getElementById('installerStatusGroup');
+  const installerStatusField = document.getElementById('installerStatus');
+
+  // Show warranty duration field only if warranty is "yes"
+  if (warrantyValue === 'yes') {
+    warrantyDurationGroup.classList.remove('hidden');
+    warrantyDurationField.setAttribute('required', 'required');
+  } else {
+    warrantyDurationGroup.classList.add('hidden');
+    warrantyDurationField.removeAttribute('required');
+    warrantyDurationField.value = ''; // Reset value when hidden
+
+    // Also hide installer status field
+    installerStatusGroup.classList.add('hidden');
+    installerStatusField.removeAttribute('required');
+    installerStatusField.value = '';
+  }
+});
+
+// Show/hide installer status field based on warranty duration selection
+document.getElementById('warrantyDuration').addEventListener('change', function() {
+  const warrantyDurationValue = this.value;
+  const installerStatusGroup = document.getElementById('installerStatusGroup');
+  const installerStatusField = document.getElementById('installerStatus');
+
+  // Show installer status field only if warranty duration is "yes"
+  if (warrantyDurationValue === 'yes') {
+    installerStatusGroup.classList.remove('hidden');
+    installerStatusField.setAttribute('required', 'required');
+  } else {
+    installerStatusGroup.classList.add('hidden');
+    installerStatusField.removeAttribute('required');
+    installerStatusField.value = ''; // Reset value when hidden
+
+    // Also hide the additional fields
+    hideAdditionalFields();
+  }
+});
+
+// Show/hide additional fields based on installer status selection
+document.getElementById('installerStatus').addEventListener('change', function() {
+  const installerStatusValue = this.value;
+
+  if (installerStatusValue === 'no') {
+    showAdditionalFields();
+  } else {
+    hideAdditionalFields();
+  }
+});
+
+function showAdditionalFields() {
+  const panelsShadeGroup = document.getElementById('panelsShadeGroup');
+  const inverterOutsideGroup = document.getElementById('inverterOutsideGroup');
+  const electricityCostGroup = document.getElementById('electricityCostGroup');
+  const additionalInfoGroup = document.getElementById('additionalInfoGroup');
+
+  panelsShadeGroup.classList.remove('hidden');
+  document.getElementById('panelsShade').setAttribute('required', 'required');
+
+  inverterOutsideGroup.classList.remove('hidden');
+  document.getElementById('inverterOutside').setAttribute('required', 'required');
+
+  electricityCostGroup.classList.remove('hidden');
+  document.getElementById('electricityCost').setAttribute('required', 'required');
+
+  additionalInfoGroup.classList.remove('hidden');
+  // additionalInfo is optional, so no required attribute
+}
+
+function hideAdditionalFields() {
+  const panelsShadeGroup = document.getElementById('panelsShadeGroup');
+  const inverterOutsideGroup = document.getElementById('inverterOutsideGroup');
+  const electricityCostGroup = document.getElementById('electricityCostGroup');
+  const additionalInfoGroup = document.getElementById('additionalInfoGroup');
+
+  panelsShadeGroup.classList.add('hidden');
+  document.getElementById('panelsShade').removeAttribute('required');
+  document.getElementById('panelsShade').value = '';
+
+  inverterOutsideGroup.classList.add('hidden');
+  document.getElementById('inverterOutside').removeAttribute('required');
+  document.getElementById('inverterOutside').value = '';
+
+  electricityCostGroup.classList.add('hidden');
+  document.getElementById('electricityCost').removeAttribute('required');
+  document.getElementById('electricityCost').value = '';
+
+  additionalInfoGroup.classList.add('hidden');
+  document.getElementById('additionalInfo').value = '';
+}
 
 </script>
 
